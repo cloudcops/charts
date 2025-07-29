@@ -480,6 +480,7 @@ jobs:
     name: Get chart latest Kubescape score
     permissions:
       contents: read
+      packages: write
     outputs:
       threshold: ${{ steps.set-output.outputs.threshold }}
     if: needs.get-chart.outputs.result == 'ok'
