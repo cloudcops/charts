@@ -2,5 +2,5 @@ dependencies:
 - name: common
   repository: oci://ghcr.io/cloudcops
   version: 2.31.3
-digest: sha256:8572402355fc375a06f520212a62b10dcf749eef0b00a8d3104988e4177838e8
-generated: "2025-05-06T10:38:35.726162187+02:00"
+digest: sha256:ab4f9dda27a4209dc16d3c5d369d01c0725c9f2197161386fc882643fe62de34
+generated: "2025-07-29T08:19:34.662681+02:00"
