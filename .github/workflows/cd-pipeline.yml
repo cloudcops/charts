@@ -72,8 +72,11 @@ jobs:
         name: Checkout Repository
         with:
           path: charts
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.18.4-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - name: Publish Chart
         run: |
-          sudo apt-get update && sudo apt-get install helm
           helm package ./charts/${{ needs.get-chart.outputs.chart }} -dependency-update
           helm push ${{ needs.get-chart.outputs.chart }}-* oci://ghcr.io/cloudcops
