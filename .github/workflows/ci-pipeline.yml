@@ -493,7 +493,7 @@ jobs:
           fetch-depth: 1
       - name: Install helm
         run: |
-          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          HELM_TARBALL="helm-v3.18.4-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - name: Run helm-dep-build
         env:
