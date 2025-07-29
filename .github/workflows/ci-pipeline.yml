@@ -184,11 +184,11 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: upstream-charts
-      # - name: Setup git configuration
-      #   run: |
-      #     cd $GITHUB_WORKSPACE/charts
-      #     git config user.name "Bitnami Bot"
-      #     git config user.email "bitnami.bot@broadcom.com"
+      - name: Setup git configuration
+        run: |
+          cd $GITHUB_WORKSPACE/charts
+          git config user.name "CloudCops Bot"
+          git config user.email "mock@cloudcops.com"
 
       # In order to avoid doing a full clone (which would fetch the index branch), we
       # unshallow the clone only using the main branch. We need to get the tags to
@@ -480,7 +480,7 @@ jobs:
     name: Get chart latest Kubescape score
     permissions:
       contents: read
-      packages: write
+      packages: read
     outputs:
       threshold: ${{ steps.set-output.outputs.threshold }}
     if: needs.get-chart.outputs.result == 'ok'
