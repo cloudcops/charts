@@ -498,6 +498,7 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
+          helm registry login ghcr.io/cloudcops --password ${{ secrets.GITHUB_TOKEN }}
           if [ -d "charts-main/charts/${CHART}" ]; then
             helm dep build charts-main/charts/${CHART}
             if [ -d "charts-main/charts/${CHART}/charts" ]; then
