@@ -78,5 +78,5 @@ jobs:
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - name: Publish Chart
         run: |
-          helm package ./charts/${{ needs.get-chart.outputs.chart }} -dependency-update
+          helm package ./charts/${{ needs.get-chart.outputs.chart }} --dependency-update
           helm push ${{ needs.get-chart.outputs.chart }}-* oci://ghcr.io/cloudcops
