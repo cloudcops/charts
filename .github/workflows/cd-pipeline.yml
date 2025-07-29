@@ -67,6 +67,7 @@ jobs:
     name: Package and Push
     permissions:
       contents: read
+      packages: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         name: Checkout Repository
@@ -76,5 +77,6 @@ jobs:
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - name: Publish Chart
         run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io/cloudcops --username ${GITHUB_ACTOR} --password-stdin
           helm package ./charts/${{ needs.get-chart.outputs.chart }} --dependency-update
           helm push ${{ needs.get-chart.outputs.chart }}-* oci://ghcr.io/cloudcops
