@@ -70,8 +70,6 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         name: Checkout Repository
-        with:
-          path: charts
       - name: Install helm
         run: |
           HELM_TARBALL="helm-v3.18.4-linux-amd64.tar.gz"
