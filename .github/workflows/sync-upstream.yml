@@ -26,7 +26,7 @@ jobs:
         run: |
           cd cc/charts
           git checkout -b test
-          for d in cc/charts/*/; do
+          for d in */; do
               cp ../../bitnami/bitnami/$d $d
           done
           cd ..
