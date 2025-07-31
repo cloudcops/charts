@@ -24,14 +24,12 @@ jobs:
           path: bitnami
       - name: Setup git configuration
         run: |
-          cd cc/charts
           git config user.name "CloudCops Bot"
           git config user.email "mock@cloudcops.com"
-      - name: Create branch
+      - name: Copy upstream changes to new branch
         run: |
+          cd cc/charts
           git checkout -b test
-      - name: Copy upstream changes
-        run: |
           # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
           for d in */; do
               rsync -a ../../bitnami/bitnami/$d $d
@@ -40,6 +38,7 @@ jobs:
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
       - name: Commit and push
         run: |
+          cd cc
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
           git push --set-upstream origin test
