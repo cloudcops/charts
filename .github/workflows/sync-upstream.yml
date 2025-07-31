@@ -31,4 +31,6 @@ jobs:
           done
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
-          git push
+          git add -A
+          git commit -m "[Cron] Sync Bitnami upstream"
+          git push --set-upstream origin test
