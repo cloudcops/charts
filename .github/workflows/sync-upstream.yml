@@ -22,11 +22,6 @@ jobs:
         with:
           repository: bitnami/charts
           path: bitnami
-      - name: Setup git configuration
-        run: |
-          cd cc
-          git config user.name "CloudCops Bot"
-          git config user.email "mock@cloudcops.com"
       - name: Copy upstream changes to new branch
         run: |
           cd cc/charts
@@ -40,6 +35,8 @@ jobs:
       - name: Commit and push
         run: |
           cd cc
+          git config user.name "CloudCops Bot"
+          git config user.email "mock@cloudcops.com"
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
           git push --set-upstream origin test
