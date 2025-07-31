@@ -27,8 +27,8 @@ jobs:
           cd cc/charts
           git checkout -b test
           for d in */; do
-              cp ../../bitnami/bitnami/$d $d
+              rsync -a ../../bitnami/bitnami/$d $d
           done
           cd ..
-          rsync -av --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
+          rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
           git push
