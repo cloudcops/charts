@@ -24,12 +24,11 @@ jobs:
           path: bitnami
       - name: Setup git configuration
         run: |
-          cd $GITHUB_WORKSPACE/charts
+          cd cc/charts
           git config user.name "CloudCops Bot"
           git config user.email "mock@cloudcops.com"
       - name: Create branch
         run: |
-          cd cc/charts
           git checkout -b test
       - name: Copy upstream changes
         run: |
