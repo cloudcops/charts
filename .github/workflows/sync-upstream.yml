@@ -46,7 +46,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
-          git push --set-upstream origin test
+          git push --set-upstream origin sync-upstream
       # - name: Commit and push
       #   uses: peter-evans/create-pull-request@v7
       #   with:
