@@ -23,6 +23,11 @@ jobs:
           git clone https://github.com/bitnami/charts bitnami
       - name: Copy upstream changes to branch
         run: |
+          cd $GITHUB_WORKSPACE/cc
+          git config user.name "CloudCops bot"
+          git config user.email "mock@cloudcops.com"
+      - name: Copy upstream changes to branch
+        run: |
           cd $GITHUB_WORKSPACE/cc/charts
           # Check if the "sync-upstream" branch exists on the remote
           if git ls-remote --exit-code . origin sync-upstream &>/dev/null; then
@@ -38,14 +43,14 @@ jobs:
           done
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
+          git add -A
+          git commit -m "[Cron] Sync Bitnami upstream"
       - name: Commit and push
         run: |
           cd $GITHUB_WORKSPACE/cc
           git config user.name "CloudCops bot"
           git config user.email "mock@cloudcops.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
-          git add -A
-          git commit -m "[Cron] Sync Bitnami upstream"
           git push --set-upstream origin sync-upstream
       # - name: Commit and push
       #   uses: peter-evans/create-pull-request@v7
