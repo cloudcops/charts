@@ -20,7 +20,7 @@ jobs:
           path: cc
       - name: Checkout bitnami/charts
         run: |
-          git clone https://github.com/bitnami/charts
+          git clone https://github.com/bitnami/charts bitnami
       - name: Copy upstream changes to new branch
         run: |
           cd cc/charts
