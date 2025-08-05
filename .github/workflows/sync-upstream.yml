@@ -11,14 +11,15 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
     steps:
       - name: Checkout cloudcops/charts
-        uses: actions/checkout@master
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           path: cc
       - name: Checkout bitnami/charts
-        uses: actions/checkout@master
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: bitnami/charts
           path: bitnami
