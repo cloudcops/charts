@@ -20,7 +20,7 @@ dependencies:
   repository: oci://ghcr.io/cloudcops
   version: 12.x.x
 - name: common
-  repository: oci://ghcr.io/cloudcops
+  repository: oci://ghcr.io/cloudcops/charts
   tags:
   - bitnami-common
   version: 2.x.x

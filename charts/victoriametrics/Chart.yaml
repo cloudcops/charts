@@ -23,7 +23,7 @@ apiVersion: v2
 appVersion: 1.122.0
 dependencies:
 - name: common
-  repository: oci://ghcr.io/cloudcops
+  repository: oci://ghcr.io/cloudcops/charts
   tags:
   - bitnami-common
   version: 2.x.x
