@@ -48,4 +48,5 @@ jobs:
         with:
           path: cc
           commit-message: "[Cron] Sync Bitnami upstream"
+          title: "[Cron] Sync Bitnami upstream"
           
