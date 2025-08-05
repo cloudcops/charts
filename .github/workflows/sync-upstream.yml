@@ -14,11 +14,11 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout cloudcops/charts
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@master
         with:
           path: cc
       - name: Checkout bitnami/charts
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@master
         with:
           repository: bitnami/charts
           path: bitnami
