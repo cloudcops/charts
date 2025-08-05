@@ -21,6 +21,10 @@ jobs:
       - name: Checkout bitnami/charts
         run: |
           git clone https://github.com/bitnami/charts bitnami
+      - name: Setup git user
+        run: |
+            git config --global user.name "CloudCops bot"
+            git config --global user.email "mock@cloudcops.com"
       - name: Copy upstream changes to new branch
         run: |
           cd cc/charts
