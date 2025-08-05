@@ -20,11 +20,8 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           path: cc
       - name: Checkout bitnami/charts
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          token: ${{ secrets.ACCESS_TOKEN }}
-          repository: bitnami/charts
-          path: bitnami
+        run: |
+          git clone https://github.com/bitnami/charts
       - name: Copy upstream changes to new branch
         run: |
           cd cc/charts
