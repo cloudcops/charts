@@ -36,11 +36,9 @@ jobs:
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
       - name: Commit and push
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd cc
-          git remote add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
           git push --set-upstream origin test
