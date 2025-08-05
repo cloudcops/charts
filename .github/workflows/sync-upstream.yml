@@ -44,7 +44,7 @@ jobs:
           git config user.name "CloudCops bot"
           git config user.email "mock@cloudcops.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
-          git checkout -b test
+          git checkout sync-upstream
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
           git push --set-upstream origin test
