@@ -24,7 +24,6 @@ jobs:
       - name: Copy upstream changes to new branch
         run: |
           cd $GITHUB_WORKSPACE/cc/charts
-          git checkout -b test
           # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
           for d in */; do
               rsync -a ../../bitnami/bitnami/$d $d
@@ -37,8 +36,9 @@ jobs:
           git config user.name "CloudCops bot"
           git config user.email "mock@cloudcops.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
+          git checkout -b test
           git add -A
-          git commit -m "[Cron] Sync Bitnami upstream"
+          git commit -m "[Cron] Sync Bitnami upstream" --quiet
           git push --set-upstream origin test
       # - name: Commit and push
       #   uses: peter-evans/create-pull-request@v7
