@@ -21,7 +21,7 @@ jobs:
       - name: Checkout bitnami/charts
         run: |
           git clone https://github.com/bitnami/charts bitnami
-      - name: Copy upstream changes to branch
+      - name: Config git user
         run: |
           cd $GITHUB_WORKSPACE/cc
           git config --global user.name "CloudCops bot"
@@ -29,6 +29,7 @@ jobs:
       - name: Copy upstream changes to branch
         run: |
           cd $GITHUB_WORKSPACE/cc/charts
+          git fetch origin
           # Check if the "sync-upstream" branch exists on the remote
           if git ls-remote --exit-code . origin sync-upstream &>/dev/null; then
               echo "Remote branch 'sync-upstream' exists. Checking it out."
