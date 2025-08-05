@@ -11,7 +11,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
     steps:
       - name: Checkout cloudcops/charts
@@ -32,10 +32,6 @@ jobs:
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
       - name: Commit and push
-        run: |
-          cd cc
-          git config user.name "CloudCops Bot"
-          git config user.email "mock@cloudcops.com"
-          git add -A
-          git commit -m "[Cron] Sync Bitnami upstream"
-          git push --set-upstream origin test
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "[Cron] Sync Bitnami upstream"
