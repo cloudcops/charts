@@ -25,8 +25,6 @@ jobs:
         run: |
             git config --global user.name "CloudCops bot"
             git config --global user.email "mock@cloudcops.com"
-            cd cc
-
       - name: Copy upstream changes to new branch
         run: |
           cd cc/charts
@@ -38,8 +36,8 @@ jobs:
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
       - name: Commit and push
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "[Cron] Sync Bitnami upstream"
-          repository: cc
-          push_options: --set-upstream
+        run: |
+          cd cc
+          git add -A
+          git commit -m "[Cron] Sync Bitnami upstream"
+          git push --set-upstream origin test
