@@ -21,11 +21,6 @@ jobs:
       - name: Checkout bitnami/charts
         run: |
           git clone https://github.com/bitnami/charts bitnami
-      - name: Setup git user
-        run: |
-          cd $GITHUB_WORKSPACE/cc
-          git config user.name "CloudCops bot"
-          git config user.email "mock@cloudcops.com"
       - name: Copy upstream changes to new branch
         run: |
           cd $GITHUB_WORKSPACE/cc/charts
@@ -39,6 +34,8 @@ jobs:
       - name: Commit and push
         run: |
           cd $GITHUB_WORKSPACE/cc
+          git config user.name "CloudCops bot"
+          git config user.email "mock@cloudcops.com"
           git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
