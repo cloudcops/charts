@@ -79,4 +79,4 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io/cloudcops --username ${GITHUB_ACTOR} --password-stdin
           helm package ./charts/${{ needs.get-chart.outputs.chart }} --dependency-update
-          helm push ${{ needs.get-chart.outputs.chart }}-* oci://ghcr.io/cloudcops
+          helm push ${{ needs.get-chart.outputs.chart }}-* oci://ghcr.io/cloudcops/charts
