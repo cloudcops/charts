@@ -35,18 +35,19 @@ jobs:
           done
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
-      # - name: Commit and push
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     cd cc
-      #     git add -A
-      #     git commit -m "[Cron] Sync Bitnami upstream"
-      #     git push --set-upstream origin test
       - name: Commit and push
-        uses: peter-evans/create-pull-request@v7
-        with:
-          path: cc
-          commit-message: "[Cron] Sync Bitnami upstream"
-          title: "[Cron] Sync Bitnami upstream"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd cc
+          git remote add origin https://${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
+          git add -A
+          git commit -m "[Cron] Sync Bitnami upstream"
+          git push --set-upstream origin test
+      # - name: Commit and push
+      #   uses: peter-evans/create-pull-request@v7
+      #   with:
+      #     path: cc
+      #     commit-message: "[Cron] Sync Bitnami upstream"
+      #     title: "[Cron] Sync Bitnami upstream"
           
