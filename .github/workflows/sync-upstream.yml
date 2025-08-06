@@ -26,20 +26,11 @@ jobs:
           cd $GITHUB_WORKSPACE/cc
           git config --global user.name "CloudCops bot"
           git config --global user.email "mock@cloudcops.com"
-      - name: Checkout branch
-        run: |
-          cd $GITHUB_WORKSPACE/cc/charts
-          # Check if the "sync-upstream" branch exists on the remote
-          if git ls-remote --heads origin refs/heads/sync-upstream | grep -q 'refs/heads/sync-upstream'; then
-              echo "Remote branch 'sync-upstream' exists. Checking it out."
-              git fetch
-              git checkout -b sync-upstream origin/sync-upstream
-          else
-              echo "Remote branch 'sync-upstream' not found. Creating and checking out a new local branch."
-              git checkout -b sync-upstream
-          fi
       - name: Copy upstream changes to branch
         run: |
+          cd $GITHUB_WORKSPACE/cc
+          git checkout -b sync-upstream origin/sync-upstream
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
           for d in */; do
               rsync -a ../../bitnami/bitnami/$d $d
@@ -48,15 +39,14 @@ jobs:
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
-      - name: Commit and push
-        run: |
-          cd $GITHUB_WORKSPACE/cc
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
-          git push --set-upstream origin sync-upstream
       # - name: Commit and push
-      #   uses: peter-evans/create-pull-request@v7
-      #   with:
-      #     path: cc
-      #     commit-message: "[Cron] Sync Bitnami upstream"
-      #     title: "[Cron] Sync Bitnami upstream"
+      #   run: |
+      #     cd $GITHUB_WORKSPACE/cc
+      #     git push --set-upstream origin sync-upstream
+      - name: Commit and push
+        uses: peter-evans/create-pull-request@v7
+        with:
+          path: cc
+          commit-message: "[Cron] Sync Bitnami upstream"
+          title: "[Cron] Sync Bitnami upstream"
           
