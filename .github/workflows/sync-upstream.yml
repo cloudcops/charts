@@ -43,20 +43,28 @@ jobs:
           cd $GITHUB_WORKSPACE/cc/charts
           # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
           for d in */; do
+              rm -rf $d
               rsync -a ../../bitnami/bitnami/$d $d
           done
           cd ..
           rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
+      - name: Commit and push
+        run: |
+          cd $GITHUB_WORKSPACE/cc
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
+          git push --set-upstream origin sync-upstream
+      - name: create pull request
+        run: |
+          cd $GITHUB_WORKSPACE/cc
+          gh pr create -B main -H sync-upstream --title '[Cron] Sync Bitnami upstream' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # - name: Commit and push
-      #   run: |
-      #     cd $GITHUB_WORKSPACE/cc
-      #     git push --set-upstream origin sync-upstream
-      - name: Commit and push
-        uses: peter-evans/create-pull-request@v7
-        with:
-          path: cc
-          commit-message: "[Cron] Sync Bitnami upstream"
-          title: "[Cron] Sync Bitnami upstream"
+      #   uses: peter-evans/create-pull-request@v7
+      #   with:
+      #     path: cc
+      #     commit-message: "[Cron] Sync Bitnami upstream"
+      #     title: "[Cron] Sync Bitnami upstream"
           
