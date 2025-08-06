@@ -40,7 +40,7 @@ jobs:
           fi
       - name: Copy upstream changes to branch
         run: |
-          cd $GITHUB_WORKSPACE/cc
+          cd $GITHUB_WORKSPACE/cc/charts
           # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
           for d in */; do
               rsync -a ../../bitnami/bitnami/$d $d
