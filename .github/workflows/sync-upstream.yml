@@ -30,8 +30,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/cc/charts
           # Check if the "sync-upstream" branch exists on the remote
-          git ls-remote --heads origin refs/heads/sync-upstream | grep sync-upstream >/dev/null
-          if [ "$?" == "1"]; then
+          if git ls-remote --heads origin refs/heads/sync-upstream | grep -q 'refs/heads/sync-upstream'; then
               echo "Remote branch 'sync-upstream' exists. Checking it out."
               git checkout sync-upstream
           else
