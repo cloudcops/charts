@@ -21,16 +21,26 @@ jobs:
       - name: Checkout bitnami/charts
         run: |
           git clone https://github.com/bitnami/charts bitnami
-      - name: Config git user
+      - name: Config git
         run: |
           cd $GITHUB_WORKSPACE/cc
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git config --global user.name "CloudCops bot"
           git config --global user.email "mock@cloudcops.com"
+      - name: Setup branch
+        run: |
+          cd $GITHUB_WORKSPACE/cc
+          # Check if the "sync-upstream" branch exists on the remote
+          if git ls-remote --heads origin refs/heads/sync-upstream | grep -q 'refs/heads/sync-upstream'; then
+              echo "Remote branch 'sync-upstream' exists. Checking it out."
+              git checkout --track origin/sync-upstream
+          else
+              echo "Remote branch 'sync-upstream' not found. Creating and checking out a new local branch."
+              git checkout -b sync-upstream
+          fi
       - name: Copy upstream changes to branch
         run: |
           cd $GITHUB_WORKSPACE/cc
-          git checkout --track origin/sync-upstream
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
           for d in */; do
               rsync -a ../../bitnami/bitnami/$d $d
