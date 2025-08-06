@@ -33,7 +33,7 @@ jobs:
           if git ls-remote --heads origin refs/heads/sync-upstream | grep -q 'refs/heads/sync-upstream'; then
               echo "Remote branch 'sync-upstream' exists. Checking it out."
               git fetch
-              git checkout --track origin/sync-upstream
+              git checkout -b sync-upstream origin/sync-upstream
           else
               echo "Remote branch 'sync-upstream' not found. Creating and checking out a new local branch."
               git checkout -b sync-upstream
@@ -49,8 +49,6 @@ jobs:
       - name: Commit and push
         run: |
           cd $GITHUB_WORKSPACE/cc
-          git config user.name "CloudCops bot"
-          git config user.email "mock@cloudcops.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git push --set-upstream origin sync-upstream
       # - name: Commit and push
