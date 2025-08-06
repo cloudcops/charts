@@ -24,7 +24,6 @@ jobs:
       - name: Config git
         run: |
           cd $GITHUB_WORKSPACE/cc
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git config --global user.name "CloudCops bot"
           git config --global user.email "mock@cloudcops.com"
       - name: Setup branch
@@ -47,12 +46,10 @@ jobs:
               rsync -a ../../bitnami/bitnami/$d $d
           done
           cd ..
-          rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .
-      - name: Commit and push
-        run: |
-          cd $GITHUB_WORKSPACE/cc
+          rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .∂∂∂
           git add -A
           git commit -m "[Cron] Sync Bitnami upstream"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
           git push --set-upstream origin sync-upstream
       - name: Create pull request
         run: |
