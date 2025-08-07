@@ -55,7 +55,7 @@ jobs:
       - name: Create pull request
         run: |
           cd $GITHUB_WORKSPACE/cc
-          gh pr create -B main -H sync-upstream --title '[Cron] Sync Bitnami upstream' --body 'Created by Github action'
+          gh pr create -B main -H sync-upstream --title '[Cron] Sync Bitnami upstream' --body 'Created by Github action' --draft
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
