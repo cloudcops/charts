@@ -32,6 +32,7 @@ jobs:
           # Check if the "sync-upstream" branch exists on the remote
           if git ls-remote --heads origin refs/heads/sync-upstream | grep -q 'refs/heads/sync-upstream'; then
               echo "Remote branch 'sync-upstream' exists. Checking it out."
+              get fetch --all
               git checkout --track origin/sync-upstream
           else
               echo "Remote branch 'sync-upstream' not found. Creating and checking out a new local branch."
