@@ -20,7 +20,7 @@ apiVersion: v2
 appVersion: 8.2.0
 dependencies:
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops/charts
   tags:
   - bitnami-common
   version: 2.x.x
@@ -39,4 +39,5 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 22.0.1
+version: 21.2.18
+# Test
