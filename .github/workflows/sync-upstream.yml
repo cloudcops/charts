@@ -67,37 +67,8 @@ jobs:
           git push origin sync-upstream
 
       # Step 3: Create a pull request for changes from the upstream.
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          # The GITHUB_TOKEN is automatically created by Actions and has permissions for this repo.
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
-          # --- Commit and Branch Details ---
-          # The commit message for the sync.
-          commit-message: "chore: sync from bitnami/charts"
-          
-          # The author and committer of the sync commit.
-          author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
-          
-          # The name of the branch to create for the pull request.
-          branch: "sync-upstream"
-          base: "main"
-
-          # --- Pull Request Details ---
-          # The title of the pull request.
-          title: "chore: Sync with upstream bitnami/charts"
-          
-          # The body content of the pull request.
-          body: |
-            This is an automated PR to sync this fork with the upstream `bitnami/charts` repository.
-            
-            It includes the latest changes from the upstream `main` branch.
-          
-          # Labels to add to the pull request for easy filtering.
-          labels: |
-            automated-sync
-            upstream-sync
-            
-          # Set to true to delete the branch after the PR is merged or closed.
-          delete-branch: true
+      - name: Create pull request
+        run: |
+          gh pr create --base main --head sync-upstream --title '[Cron] Sync Bitnami upstream' --body 'Created by Github action' --draft
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
