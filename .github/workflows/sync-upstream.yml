@@ -36,7 +36,7 @@ jobs:
       - name: Backup workflow files
         run: |
           mkdir ../backup
-          cp .github ../backup
+          cp -r .github ../backup
 
       # Step 2: Sync the 'main' branch of the fork with the upstream repository.
       # This step adds the upstream repo as a remote, fetches the changes,
@@ -58,7 +58,7 @@ jobs:
       - name: Restore workflow files
         run: |
           rm -rf .github
-          cp ../backup/.github .
+          cp -r ../backup/.github .
           git add .github
           git commit -m "Restore workflows"
       - name: Push
