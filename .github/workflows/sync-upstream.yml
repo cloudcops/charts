@@ -29,14 +29,6 @@ jobs:
       # This is necessary for the workflow to access your repo's content.
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          # We need to fetch all history for a proper merge, not just the last commit.
-          fetch-depth: 0
-
-      - name: Backup workflow files
-        run: |
-          mkdir ../backup
-          cp -r .github ../backup
 
       # Step 2: Sync the 'main' branch of the fork with the upstream repository.
       # This step adds the upstream repo as a remote, fetches the changes,
@@ -55,16 +47,26 @@ jobs:
           # Create new branch from upstream's main branch
           git checkout -b sync-upstream upstream/main
 
-      - name: Restore workflow files
-        run: |
-          rm -rf .github
-          cp -r ../backup/.github .
+          # Restore the .github directory from your fork's main branch
+          git checkout origin/main -- .github
+          
+          # Commit the restored workflows if they were different from upstream's
+          # This prevents an error if there are no changes to commit.
           git add .github
-          git commit -m "Restore workflows"
-      - name: Push
-        run: |
+          if ! git diff --staged --quiet; then
+            git commit -m "Restore fork-specific GitHub Actions workflows"
+          fi
+
           # Push upstream's main branch to out fork
           git push origin sync-upstream
+
+      - name: Diagnose Token Permissions
+        run: |
+          echo "--- Inspecting token permissions ---"
+          gh api repos/${{ github.repository }} --jq .permissions
+          echo "------------------------------------"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 3: Create a pull request for changes from the upstream.
       - name: Create pull request
