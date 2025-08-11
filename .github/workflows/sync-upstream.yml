@@ -56,7 +56,7 @@ jobs:
           # Restore the .github directory from your fork's main branch
           git checkout origin/main -- .github
 
-          # Check which subfolders of "bitnami" were deleter in our fork and delete them again in case there were changes that recreated them
+          # Check which subfolders of "bitnami" were deleted in our fork and delete them again in case there were changes that recreated them
           UPSTREAM_CONTENTS=$(git ls-tree --name-only upstream/main:bitnami/ | sort)
           ORIGIN_CONTENTS=$(git ls-tree --name-only origin/main:bitnami/ | sort)
           (comm -23 <(echo "$UPSTREAM_CONTENTS") <(echo "$ORIGIN_CONTENTS")) | xargs -I {} rm -rf "bitnami/{}"
@@ -76,6 +76,6 @@ jobs:
       # Step 3: Create a pull request for changes from the upstream.
       - name: Create pull request
         run: |
-          gh pr create --base main --head sync-upstream --title '[Cron] Sync Bitnami upstream' --body 'Created by Github action' --draft
+          gh pr create --base main --head sync-upstream --title '[Cron] Sync Bitnami upstream' --body '🛑 WARNING  🛑\n\nThis PR probably needs to have conflicts checked before being valid !\n\nAfter main is successfully merged into the branch, the amount of changes will probably reduce from thousands to below 100.' --draft
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
