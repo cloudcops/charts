@@ -23,7 +23,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      workflows: write
 
     steps:
       # Step 1: Check out the fork's repository.
