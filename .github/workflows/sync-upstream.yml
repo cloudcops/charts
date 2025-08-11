@@ -45,7 +45,7 @@ jobs:
           git fetch upstream
           
           # Create new branch from upstream's main branch
-          git checkout -b sync-upstream origin/sync-upstream
+          git checkout -b sync-upstream upstream/main
 
       # Step 3: Delete stuff that was deleted in our fork, remove changes that are unwanted
       - name: Adjust sync
