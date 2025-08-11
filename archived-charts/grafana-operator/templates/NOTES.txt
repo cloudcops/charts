@@ -1,0 +1,18 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+NOTICE: Starting August 28th, 2025, only a limited subset of images/charts will remain available for free. Backup will be available for some time at the 'Bitnami Legacy' repository. More info at https://github.com/bitnami/containers/issues/83267
+
+** Please be patient while the chart is being deployed **
+
+Watch the Grafana Operator Deployment status using the command:
+
+    kubectl get deploy -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+
+{{- if .Values.operator.enabled }}
+{{ include "common.warnings.rollingTag" .Values.operator.image }}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "grafana" "operator") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.operator.image .Values.grafana.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.operator.image .Values.grafana.image) "context" $) }}
