@@ -82,6 +82,7 @@ jobs:
           
           # The name of the branch to create for the pull request.
           branch: "sync-upstream"
+          base: "main"
 
           # --- Pull Request Details ---
           # The title of the pull request.
