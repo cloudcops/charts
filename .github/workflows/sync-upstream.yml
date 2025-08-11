@@ -1,68 +1,99 @@
-name: '[Support] Sync upstream Bitnami changes'
+# This is a GitHub Actions workflow that syncs a fork with its upstream repository.
+# It runs on a schedule and creates a pull request with any new changes.
+
+name: Sync Upstream Fork
+
 on:
-  # workflow_dispatch:
+  # Trigger the workflow to run weekly at 02:00 on Monday.
   # schedule:
-  #   - cron: '0 3 * * 0'
+  #   - cron: '0 2 * * 1'
   push:
     branches:
       - main
+  
+  # Allow the workflow to be run manually from the GitHub Actions tab.
+  workflow_dispatch:
 
 jobs:
   sync:
+    # The type of runner that the job will run on.
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - name: Checkout cloudcops/charts
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          path: cc
-      - name: Checkout bitnami/charts
-        run: |
-          git clone https://github.com/bitnami/charts bitnami
-      - name: Config git
-        run: |
-          cd $GITHUB_WORKSPACE/cc
-          git config --global user.name "CloudCops bot"
-          git config --global user.email "mock@cloudcops.com"
-      - name: Setup branch
-        run: |
-          cd $GITHUB_WORKSPACE/cc
-          # Check if the "sync-upstream" branch exists on the remote
-          if git ls-remote --heads origin refs/heads/sync-upstream | grep -q 'refs/heads/sync-upstream'; then
-              echo "Remote branch 'sync-upstream' exists. Checking it out."
-              git fetch --all
-              git checkout --track origin/sync-upstream
-          else
-              echo "Remote branch 'sync-upstream' not found. Creating and checking out a new local branch."
-              git checkout -b sync-upstream
-          fi
-      - name: Copy upstream changes to branch
-        run: |
-          cd $GITHUB_WORKSPACE/cc/charts
-          # This loop makes it so that archived charts (which are no longer in the charts folder) aren't synced
-          for d in */; do
-              rm -rf $d
-              rsync -a ../../bitnami/bitnami/$d $d
-          done
-          cd ..
-          rsync -a --exclude 'bitnami/' --exclude '.github/' --exclude '.vib/' ../bitnami/ .∂∂∂
-          git add -A
-          git commit -m "[Cron] Sync Bitnami upstream"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cloudcops/charts
-          git push --set-upstream origin sync-upstream
-      - name: Create pull request
-        run: |
-          cd $GITHUB_WORKSPACE/cc
-          gh pr create -B main -H sync-upstream --title '[Cron] Sync Bitnami upstream' --body 'Created by Github action' --draft
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    # Check if the commit is from the bot to prevent infinite loops.
+    # If the last commit message contains "[skip-ci]", the job will be skipped.
+    if: "!contains(github.event.head_commit.message, '[skip-ci]')"
 
-      # - name: Commit and push
-      #   uses: peter-evans/create-pull-request@v7
-      #   with:
-      #     path: cc
-      #     commit-message: "[Cron] Sync Bitnami upstream"
-      #     title: "[Cron] Sync Bitnami upstream"
+    steps:
+      # Step 1: Check out your repository.
+      # This is necessary for the workflow to access your repo's content.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # We need to fetch all history for a proper merge, not just the last commit.
+          fetch-depth: 0
+          # Use a personal access token (PAT) if you want to trigger other workflows.
+          # The default GITHUB_TOKEN does not have permissions to trigger other workflows.
+          # token: ${{ secrets.PAT }} 
+
+      # Step 2: Configure Git user.
+      # This sets the author for the commits the action will make.
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # Step 3: Run the sync and create a pull request if there are changes.
+      # This action handles fetching the upstream, merging, and creating the PR.
+      - name: Create Pull Request after syncing with upstream
+        uses: peter-evans/create-pull-request@v6
+        with:
+          # The GITHUB_TOKEN is automatically created by Actions and has permissions for this repo.
+          token: ${{ secrets.GITHUB_TOKEN }}
           
+          # The path to your local repository.
+          path: '.'
+          
+          # --- Commit and Branch Details ---
+          # The commit message for the sync.
+          commit-message: "chore: sync from bitnami/charts"
+          
+          # The author and committer of the sync commit.
+          author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          
+          # The name of the branch to create for the pull request.
+          # The action will automatically handle creating a unique branch name if this one exists.
+          branch: "sync-with-upstream"
+          
+          # A prefix for the branch name if you want the action to generate a unique name.
+          branch-suffix: "short-commit-hash"
+
+          # --- Pull Request Details ---
+          # The title of the pull request.
+          title: "chore: Sync with upstream bitnami/charts"
+          
+          # The body content of the pull request.
+          body: |
+            This is an automated PR to sync this fork with the upstream `bitnami/charts` repository.
+            
+            It includes the latest changes from the upstream `main` branch.
+            
+            *[skip-ci]*
+          
+          # Labels to add to the pull request for easy filtering.
+          labels: |
+            automated-sync
+            upstream-sync
+            
+          # --- Syncing Logic ---
+          # The repository to sync from.
+          upstream-repository: 'bitnami/charts'
+          
+          # The branch to sync from in the upstream repository.
+          upstream-branch: 'main'
+          
+          # The branch in your fork to merge the changes into.
+          fork-branch: 'main'
+          
+          # Set to true to delete the branch after the PR is merged or closed.
+          delete-branch: true
