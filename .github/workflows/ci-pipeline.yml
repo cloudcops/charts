@@ -60,7 +60,7 @@ jobs:
             # Changes done in only one chart -> OK
             echo "result=ok" >> "$GITHUB_OUTPUT"
             # Extra output: chart name
-            chart_name="${charts_dirs_changed//charts\/}"
+            chart_name="${charts_dirs_changed//bitnami\/}"
             echo "chart=${chart_name}" >> "$GITHUB_OUTPUT"
             # Extra output: values-updated
             # shellcheck disable=SC2076
@@ -114,7 +114,7 @@ jobs:
             if [[ -n "$image" && $image != {{*}} ]]; then
               hardcoded_images+=("${image}")
             fi
-          done <<< "$(grep --exclude "NOTES.txt" -REoh "\s*image:\s+[\"']*.+[\"']*\s*$" "charts/${CHART}/templates" | sed "s/image: [\"']*//" | sed "s/[\"']*$//")"
+          done <<< "$(grep --exclude "NOTES.txt" -REoh "\s*image:\s+[\"']*.+[\"']*\s*$" "bitnami/${CHART}/templates" | sed "s/image: [\"']*//" | sed "s/[\"']*$//")"
           echo "${hardcoded_images[@]}"
           if [[ ${#hardcoded_images[@]} -gt 0 ]] ; then
             echo "error=Found hardcoded images in the chart templates: ${hardcoded_images[*]}"
@@ -500,10 +500,10 @@ jobs:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io/cloudcops --username ${GITHUB_ACTOR} --password-stdin
-          if [ -d "charts-main/charts/${CHART}" ]; then
-            helm dep build charts-main/charts/${CHART}
-            if [ -d "charts-main/charts/${CHART}/charts" ]; then
-              cd charts-main/charts/${CHART}/charts
+          if [ -d "charts-main/bitnami/${CHART}" ]; then
+            helm dep build charts-main/bitnami/${CHART}
+            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
+              cd charts-main/bitnami/${CHART}/charts
               for filename in *.tgz; do
                 tar -xf "$filename"
                 rm -f "$filename"
@@ -525,12 +525,12 @@ jobs:
           image: bitnami/kubescape:3.0.3
           options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
           run: |
-            if [ -d "/charts/charts/${CHART}" ]; then
-              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/charts/${CHART} --format json -o /out/report.json
+            if [ -d "/charts/bitnami/${CHART}" ]; then
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
               # Truncate score to 2 decimals
               printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
             else
-              echo "Chart not found at /charts/charts/${CHART}. It will be assumed that the upstream chart does not exist."
+              echo "Chart not found at /charts/bitnami/${CHART}. It will be assumed that the upstream chart does not exist."
             fi
       - id: set-output
         name: Set threshold score
