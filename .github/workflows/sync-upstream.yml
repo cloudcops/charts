@@ -19,6 +19,12 @@ jobs:
     # The type of runner that the job will run on.
     runs-on: ubuntu-latest
 
+    # Permissions needed
+    permissions:
+      contents: write
+      pull-requests: write
+      workflows: write
+
     steps:
       # Step 1: Check out the fork's repository.
       # This is necessary for the workflow to access your repo's content.
@@ -27,6 +33,11 @@ jobs:
         with:
           # We need to fetch all history for a proper merge, not just the last commit.
           fetch-depth: 0
+
+      - name: Backup workflow files
+        run: |
+          mkdir ../backup
+          cp .github ../backup
 
       # Step 2: Sync the 'main' branch of the fork with the upstream repository.
       # This step adds the upstream repo as a remote, fetches the changes,
@@ -44,7 +55,15 @@ jobs:
           
           # Create new branch from upstream's main branch
           git checkout -b sync-upstream upstream/main
-          
+
+      - name: Restore workflow files
+        run: |
+          rm -rf .github
+          cp ../backup/.github .
+          git add .github
+          git commit -m "Restore workflows"
+      - name: Push
+        run: |
           # Push upstream's main branch to out fork
           git push origin sync-upstream
 
