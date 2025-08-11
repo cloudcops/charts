@@ -32,8 +32,8 @@ jobs:
 
       # Step 2: Sync the 'main' branch of the fork with the upstream repository.
       # This step adds the upstream repo as a remote, fetches the changes,
-      # and adds them as a branch to our fork. Rebasing will need to happen in the MR in order to merge. This can't happen automatically, because changes could be in conflict.
-      - name: Sync fork with upstream
+      # and adds them as a branch to our fork.
+      - name: Setup git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -45,31 +45,33 @@ jobs:
           git fetch upstream
           
           # Create new branch from upstream's main branch
-          git checkout -b sync-upstream upstream/main
+          git checkout -b sync-upstream origin/sync-upstream
+
+      # Step 3: Delete stuff that was deleted in our fork, remove changes that are unwanted
+      - name: Adjust sync
+        run: |
+          # In case changes re-added the ".vib" folder
+          rm -rf .vib
 
           # Restore the .github directory from your fork's main branch
           git checkout origin/main -- .github
+
+          # Check which subfolders of "bitnami" were deleter in our fork and delete them again in case there were changes that recreated them
+          UPSTREAM_CONTENTS=$(git ls-tree --name-only upstream/main:bitnami/ | sort)
+          ORIGIN_CONTENTS=$(git ls-tree --name-only origin/main:bitnami/ | sort)
+          (comm -23 <(echo "$UPSTREAM_CONTENTS") <(echo "$ORIGIN_CONTENTS")) | xargs -I {} rm -rf "bitnami/{}"
           
-          # Commit the restored workflows if they were different from upstream's
-          # This prevents an error if there are no changes to commit.
-          git add .github
+          # Commit restored stuff
+          git add --all
           if ! git diff --staged --quiet; then
             git commit -m "Restore fork-specific GitHub Actions workflows"
           fi
 
-          # Push upstream's main branch to out fork
+          # Push upstream's main branch to our fork
           git push origin sync-upstream
 
-          # Remove second remote
+          # Remove second remote so it doesn't interfere with "gh pr create"
           git remote remove upstream
-
-      - name: Diagnose Token Permissions
-        run: |
-          echo "--- Inspecting token permissions ---"
-          gh api repos/${{ github.repository }} --jq .permissions
-          echo "------------------------------------"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 3: Create a pull request for changes from the upstream.
       - name: Create pull request
