@@ -139,7 +139,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 8.0.12-debian-12-r1
+  tag: 8.0.12
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -263,9 +263,9 @@ tls:
   ## @param tls.extraDnsNames Add extra dns names to the CA, can solve x509 auth issue for pod clients
   ##
   image:
-    registry: docker.io
-    repository: bitnami/nginx
-    tag: 1.29.0-debian-12-r6
+    registry: ghcr.io
+    repository: cloudcops/nginx
+    tag: 1.29.0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -855,9 +855,9 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.image.pullSecrets Init container auto-discovery image pull secrets
     ##
     image:
-      registry: docker.io
-      repository: bitnami/kubectl
-      tag: 1.33.3-debian-12-r3
+      registry: ghcr.io
+      repository: cloudcops/kubectl
+      tag: 1.33.3
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -904,9 +904,9 @@ externalAccess:
     ## @param externalAccess.dnsCheck.image.pullSecrets Init container dns-check image pull secrets
     ##
     image:
-      registry: docker.io
-      repository: bitnami/os-shell
-      tag: 12-debian-12-r50
+      registry: ghcr.io
+      repository: cloudcops/os-shell
+      tag: 12
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1633,9 +1633,9 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
-    repository: bitnami/os-shell
-    tag: 12-debian-12-r50
+    registry: ghcr.io
+    repository: cloudcops/os-shell
+    tag: 12
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2433,9 +2433,9 @@ metrics:
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
-    repository: bitnami/mongodb-exporter
-    tag: 0.47.0-debian-12-r0
+    registry: ghcr.io
+    repository: cloudcops/mongodb-exporter
+    tag: 0.47.0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
