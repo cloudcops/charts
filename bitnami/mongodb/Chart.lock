@@ -1,6 +1,6 @@
 dependencies:
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 2.31.3
-digest: sha256:f9c314553215490ea1b94c70082cb152d6ff5916ce185b4e00f5287f81545b4c
-generated: "2025-08-07T17:23:54.815389206Z"
+digest: sha256:ab4f9dda27a4209dc16d3c5d369d01c0725c9f2197161386fc882643fe62de34
+generated: "2025-07-29T08:20:17.150169+02:00"
