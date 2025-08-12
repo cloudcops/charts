@@ -1,8 +1,37 @@
 # Changelog
 
-## 32.3.7 (2025-07-23)
+## 32.3.14 (2025-08-07)
 
-* [bitnami/kafka]fix(provisioning): Fix typo in initContainers ([#35255](https://github.com/bitnami/charts/pull/35255))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#35615](https://github.com/bitnami/charts/pull/35615))
+
+## <small>32.3.13 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35577) ([936d2fe](https://github.com/bitnami/charts/commit/936d2fe023cce7dcb1a5c9db8ca213b5002d81bd)), closes [#35577](https://github.com/bitnami/charts/issues/35577)
+
+## <small>32.3.12 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35572) ([9cf57dc](https://github.com/bitnami/charts/commit/9cf57dcfd95f6b0f957b8cda845c25a95df31f4b)), closes [#35572](https://github.com/bitnami/charts/issues/35572)
+
+## <small>32.3.11 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35494) ([06795b8](https://github.com/bitnami/charts/commit/06795b8d5d3e9be7e09b398e65c402898b1fcea1)), closes [#35494](https://github.com/bitnami/charts/issues/35494)
+
+## <small>32.3.10 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kafka] Fix component labels of controller to 'controller-eligible' (#35200) ([6cda3bc](https://github.com/bitnami/charts/commit/6cda3bc40d5acac356caf8a8b9a7f145ddca6018)), closes [#35200](https://github.com/bitnami/charts/issues/35200)
+
+## <small>32.3.9 (2025-07-29)</small>
+
+* [bitnami/kafka] Fix provisioning postScript (#35310) ([c5b2cd2](https://github.com/bitnami/charts/commit/c5b2cd2d2ebf0bb50d944e79303438252be34c7a)), closes [#35310](https://github.com/bitnami/charts/issues/35310)
+
+## <small>32.3.8 (2025-07-25)</small>
+
+* [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling (#35190) ([47af963](https://github.com/bitnami/charts/commit/47af96309b90d5259c2c09b073bbac1a18480db5)), closes [#35190](https://github.com/bitnami/charts/issues/35190) [PKCS#8](https://github.com/PKCS/issues/8)
+
+## <small>32.3.7 (2025-07-23)</small>
+
+* [bitnami/kafka]fix(provisioning): Fix typo in initContainers (#35255) ([51523ee](https://github.com/bitnami/charts/commit/51523eef4e2601d0df89b6d9a26dd7e8d1dd5304)), closes [#35255](https://github.com/bitnami/charts/issues/35255)
 
 ## <small>32.3.6 (2025-07-18)</small>
 
