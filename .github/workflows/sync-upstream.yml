@@ -1,0 +1,85 @@
+# This is a GitHub Actions workflow that syncs a fork with its upstream repository.
+# It runs on a schedule, fetches changes from the upstream, and creates a pull request.
+
+name: Sync Upstream Fork
+
+on:
+  # Trigger the workflow to run weekly at 02:00 on Monday.
+  schedule:
+    - cron: '0 2 * * 1'
+  push:
+    branches:
+      - main
+  
+  # Allow the workflow to be run manually from the GitHub Actions tab.
+  workflow_dispatch:
+
+jobs:
+  sync:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    # Permissions needed
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # Step 1: Check out the fork's repository.
+      # This is necessary for the workflow to access your repo's content.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Sync the 'main' branch of the fork with the upstream repository.
+      # This step adds the upstream repo as a remote, fetches the changes,
+      # and adds them as a branch to our fork.
+      - name: Setup git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Add the upstream repository as a remote.
+          git remote add upstream https://github.com/bitnami/charts.git
+          
+          # Fetch all branches from the upstream repository.
+          git fetch upstream
+          
+          # Create new branch from upstream's main branch
+          git checkout -b sync-upstream upstream/main
+
+      # Step 3: Delete stuff that was deleted in our fork, remove changes that are unwanted
+      - name: Adjust sync
+        run: |
+          # In case changes re-added the ".vib" folder
+          rm -rf .vib
+
+          # Restore the .github directory from your fork's main branch
+          git checkout origin/main -- .github
+
+          # Check which subfolders of "bitnami" were deleted in our fork and delete them again in case there were changes that recreated them
+          UPSTREAM_CONTENTS=$(git ls-tree --name-only upstream/main:bitnami/ | sort)
+          ORIGIN_CONTENTS=$(git ls-tree --name-only origin/main:bitnami/ | sort)
+          (comm -23 <(echo "$UPSTREAM_CONTENTS") <(echo "$ORIGIN_CONTENTS")) | xargs -I {} rm -rf "bitnami/{}"
+          
+          # Commit restored stuff
+          git add --all
+          if ! git diff --staged --quiet; then
+            git commit -m "Restore fork-specific GitHub Actions workflows"
+          fi
+
+          # Push upstream's main branch to our fork
+          git push origin sync-upstream
+
+          # Remove second remote so it doesn't interfere with "gh pr create"
+          git remote remove upstream
+
+      # Step 3: Create a pull request for changes from the upstream.
+      - name: Create pull request
+        run: |
+          gh pr create --base main --head sync-upstream --title '[Cron] Sync Bitnami upstream' --body '🛑 WARNING 🛑
+          
+          This PR probably needs to have conflicts checked before being valid !
+          
+          After main is successfully merged into the branch, the amount of changes will probably reduce from thousands to below 100.' --draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
