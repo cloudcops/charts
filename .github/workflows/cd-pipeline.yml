@@ -44,7 +44,7 @@ jobs:
             echo "result=fail" >> $GITHUB_OUTPUT
           elif [[ "$num_charts_changed" -eq "1" ]]; then
             # Changes done in only one chart -> OK
-            chart_name=$(echo "$charts_dirs_changed" | sed "s|charts/||g")
+            chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
             echo "chart=${chart_name}" >> $GITHUB_OUTPUT
             echo "result=ok" >> $GITHUB_OUTPUT
           else
@@ -78,5 +78,5 @@ jobs:
       - name: Publish Chart
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io/cloudcops --username ${GITHUB_ACTOR} --password-stdin
-          helm package ./${{ needs.get-chart.outputs.chart }} --dependency-update
+          helm package ./bitnami/${{ needs.get-chart.outputs.chart }} --dependency-update
           helm push ${{ needs.get-chart.outputs.chart }}-* oci://ghcr.io/cloudcops/charts
