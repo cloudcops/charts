@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: os-shell
-      image: ghcr.io/cloudcops/os-shell:12
+      image: ghcr.io/cloudcops/containers/os-shell:12
     - name: rabbitmq
       image: ghcr.io/cloudcops/containers/rabbitmq:4.1.3
   licenses: Apache-2.0
